@@ -2,7 +2,7 @@ import React from 'react';
 import './App.css';
 import TaskInput from './components/TaskInput';
 import TaskList from './components/TaskList';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const data = [
   {id: 1, text: "Finish contacts hw", status: true},
@@ -16,7 +16,24 @@ const data = [
 function App() {
 
   const [tasks, setTasks] = useState(data);
-  console.log(tasks);
+  
+  const [filterStatus, setFilterStatus] = useState("all");
+
+  const [filterTasks, setFilterTasks] = useState(tasks);
+
+  useEffect(() => {
+    const handleFilter = () => {
+      if (filterStatus === "active") {
+        setFilterTasks(tasks.filter((task) => !task.status));
+      } else if (filterStatus == "completed") {
+        setFilterTasks(tasks.filter((task) => task.status));
+
+      } else {
+        setFilterTasks(tasks);
+      }
+    }
+    handleFilter();
+  }, [tasks, filterStatus])
 
   return (
     <div className="App">
@@ -30,7 +47,14 @@ function App() {
           </div>
         </div>
         <TaskInput tasks={tasks} setTasks={setTasks}/>
-        <TaskList tasks={tasks} setTasks={setTasks}/>
+        <TaskList 
+        tasks={tasks} 
+        setTasks={setTasks} 
+        filterStatus={filterStatus} 
+        setFilterStatus={setFilterStatus}
+        filterTasks={filterTasks}
+        setFilterTasks={setFilterTasks}
+        />
       </div>
     </div>
   );

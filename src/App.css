@@ -64,6 +64,9 @@
   border-radius: 50%;
   cursor: pointer;
   transition: all 0.25s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .check-mark:hover {
@@ -73,6 +76,10 @@
 .check-mark.checked {
   background-color: pink;
   background: linear-gradient(135deg, #55DDFF 0%, #C058F3 100%);
+}
+
+.check-mark.checked img, .check-mark:hover img {
+  visibility: visible;
 }
 
 .todo-text.checked {
@@ -139,6 +146,10 @@
 .items-statuses {
   display: flex;
   justify-content: space-between;
+}
+
+.items-statuses .active {
+  color:hsl(220, 98%, 61%);
 }
 
 .items-statuses span {

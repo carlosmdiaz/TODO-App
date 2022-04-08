@@ -1,28 +1,37 @@
 import React from 'react'
+import FilterControl from './FilterControl'
 import Task from './Task'
 
-function TaskList({tasks, setTasks}) {
+function TaskList({tasks, setTasks, filterStatus, setFilterStatus, filterTasks, setFilterTasks}) {
     
+    const clearCompleted = () => {
+        setTasks(tasks.filter((task) => !task.status));
+    }
+
+
   return (
     <div className='todo-items-wrapper'>
         <div className='todo-items'>
             {/* PUT TODO COMPONENTS HERE */}
-            {tasks.map((task) => {
-                return <Task text = {task.text}/>
+            {filterTasks.map((task) => {
+                return <Task 
+                        task = {task} 
+                        tasks={tasks} 
+                        setTasks={setTasks}/>
             })}
             {/*CAN BE ITS OWN COMPONENT */}
             <div className='todo-items-info'>
                 <div className='items-left'>
                     {`${tasks.length} items left`}
                 </div>
-                <div className='items-statuses'>
-                    <span>All</span>
-                    <span>Active</span>
-                    <span>Complete</span>
-
-                </div>
+                <FilterControl 
+                filterStatus={filterStatus} 
+                setFilterStatus={setFilterStatus}
+                filterTasks={filterTasks}
+                setFilterTasks={setFilterTasks}
+                />
                 <div className='items-clear'>
-                    <span>Clear Completed</span>
+                    <span onClick={clearCompleted}>Clear Completed</span>
                 </div>
             </div>
         </div>
