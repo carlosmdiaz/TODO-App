@@ -1,5 +1,7 @@
-import React, { useState } from 'react'
-import '../App.css';
+import React, { useState } from 'react';
+import  { addDoc, collection } from 'firebase/firestore';
+import db from '../utils/firebase';
+
 function TaskInput({tasks, setTasks}) {
 
   const createId = (array) => {
@@ -15,21 +17,28 @@ function TaskInput({tasks, setTasks}) {
   }
 
   // I need a function that runs when I submit
-  const handleForm = (e) => {
+  const handleForm =  async (e) => {
     e.preventDefault();
     // ADD what I put in input to the tasks array
     // ONLY CREATE OBJECT IF THERE IS AN INPUT?
     // Create an object with whatever I wrote in input as the text
     
     if (input) {
-      const newTask = {
-        id: createId(tasks), 
-        text: input.trim(), 
-        status: false,
-      }
+      // const newTask = {
+      //   id: createId(tasks), 
+      //   text: input.trim(), 
+      //   status: false,
+      // }
       // ADD a new task to the state
-      setTasks([newTask, ...tasks])
-      // Reset Input
+      // setTasks([newTask, ...tasks])
+      // // Reset Input
+      // setInput('');
+      const collectionRef = collection(db, "tasks");
+      const payload = {
+        text: input.trim(),
+        status: false
+      }
+      await addDoc(collectionRef, payload);
       setInput('');
     }
   }

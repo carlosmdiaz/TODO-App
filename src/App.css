@@ -11,6 +11,7 @@
   background-color: hsl(235, 21%, 11%);
   background-image: url('./images/bg-desktop-dark.jpg');
   background-repeat: no-repeat;
+  background-size: contain;
   font-size: 18px;
   font-family: 'Josefin Sans', sans-serif;
   display: flex;
@@ -37,9 +38,6 @@
   font-size: 50px;
   font-weight: bold;
   letter-spacing: 10px;
-}
-.theme {
-
 }
 
 .new-todo {
@@ -78,13 +76,13 @@
   background: linear-gradient(135deg, #55DDFF 0%, #C058F3 100%);
 }
 
-.check-mark.checked img, .check-mark:hover img {
-  visibility: visible;
-}
-
 .todo-text.checked {
   text-decoration: line-through;
   color: hsl(233, 14%, 35%);
+}
+
+.check-mark.checked img, .check-mark:hover img {
+  visibility: visible;
 }
 
 .new-todo-input {

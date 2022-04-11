@@ -1,11 +1,18 @@
 import React from 'react'
 import FilterControl from './FilterControl'
 import Task from './Task'
+import { deleteDoc,doc } from 'firebase/firestore'
+import db from '../utils/firebase'
 
 function TaskList({tasks, setTasks, filterStatus, setFilterStatus, filterTasks, setFilterTasks}) {
     
     const clearCompleted = () => {
-        setTasks(tasks.filter((task) => !task.status));
+       // setTasks(tasks.filter((task) => !task.status));
+       filterTasks.map(async (item)=> {
+        if(item.status === true) {
+           await deleteDoc(doc(db,"tasks", item.id))
+        }
+    })
     }
 
 
@@ -22,7 +29,7 @@ function TaskList({tasks, setTasks, filterStatus, setFilterStatus, filterTasks, 
             {/*CAN BE ITS OWN COMPONENT */}
             <div className='todo-items-info'>
                 <div className='items-left'>
-                    {`${tasks.length} items left`}
+                    {`${filterTasks.length} items left`}
                 </div>
                 <FilterControl 
                 filterStatus={filterStatus} 

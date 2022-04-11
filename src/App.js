@@ -3,6 +3,8 @@ import './App.css';
 import TaskInput from './components/TaskInput';
 import TaskList from './components/TaskList';
 import { useState, useEffect } from 'react';
+import { onSnapshot, collection, doc } from 'firebase/firestore';
+import db from './utils/firebase';
 
 const data = [
   {id: 1, text: "Finish contacts hw", status: true},
@@ -21,19 +23,36 @@ function App() {
 
   const [filterTasks, setFilterTasks] = useState(tasks);
 
-  useEffect(() => {
-    const handleFilter = () => {
-      if (filterStatus === "active") {
-        setFilterTasks(tasks.filter((task) => !task.status));
-      } else if (filterStatus == "completed") {
-        setFilterTasks(tasks.filter((task) => task.status));
+  // useEffect(() => {
+  //   const handleFilter = () => {
+  //     if (filterStatus === "active") {
+  //       setFilterTasks(tasks.filter((task) => !task.status));
+  //     } else if (filterStatus == "completed") {
+  //       setFilterTasks(tasks.filter((task) => task.status));
 
-      } else {
-        setFilterTasks(tasks);
+  //     } else {
+  //       setFilterTasks(tasks);
+  //     }
+  //   }
+  //   handleFilter();
+  // }, [tasks, filterStatus])
+
+  useEffect(() => {
+    const unsub = onSnapshot(collection(db, "tasks"), (snapshot) => {
+     let todos = snapshot.docs.map((doc) => ({...doc.data(), id: doc.id}));
+     const handleFilter = () => {
+        if (filterStatus === "active") {
+          return setFilterTasks(todos.filter((task) => !task.status));
+        } else if (filterStatus == "completed") {
+          return setFilterTasks(todos.filter((task) => task.status));
+        } else {
+          return setFilterTasks(todos);
+        }
       }
-    }
-    handleFilter();
-  }, [tasks, filterStatus])
+      handleFilter();
+    });
+    return unsub;
+  }, [tasks, filterStatus]);
 
   return (
     <div className="App">
@@ -46,7 +65,9 @@ function App() {
             <img src='./images/icon-sun.svg' alt='theme'/>
           </div>
         </div>
-        <TaskInput tasks={tasks} setTasks={setTasks}/>
+        <TaskInput 
+        tasks={tasks} 
+        setTasks={setTasks}/>
         <TaskList 
         tasks={tasks} 
         setTasks={setTasks} 
