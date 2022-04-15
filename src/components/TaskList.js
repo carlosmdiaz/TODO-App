@@ -1,18 +1,24 @@
 import React from 'react'
 import FilterControl from './FilterControl'
 import Task from './Task'
-import { deleteDoc,doc } from 'firebase/firestore'
+import { deleteDoc, doc, setDoc } from 'firebase/firestore'
 import db from '../utils/firebase'
 
-function TaskList({tasks, setTasks, filterStatus, setFilterStatus, filterTasks, setFilterTasks}) {
+function TaskList({tasks, setTasks, filterStatus, setFilterStatus, filterTasks, setFilterTasks, userId}) {
     
     const clearCompleted = () => {
-       // setTasks(tasks.filter((task) => !task.status));
-       filterTasks.map(async (item)=> {
-        if(item.status === true) {
-           await deleteDoc(doc(db,"tasks", item.id))
+    //    // setTasks(tasks.filter((task) => !task.status));
+    //    filterTasks.map(async (item)=> {
+    //     if(item.status === true) {
+    //        await deleteDoc(doc(db,"users", item.id))
+    //     }
+    // })
+        const docRef = doc(db, "users", `${userId}`);
+        let arrayRef = filterTasks.filter((task) => task === false);
+        const payload = {
+            tasks: arrayRef
         }
-    })
+        setDoc(docRef, payload);
     }
 
 
@@ -24,7 +30,10 @@ function TaskList({tasks, setTasks, filterStatus, setFilterStatus, filterTasks, 
                 return <Task 
                         task = {task} 
                         tasks={tasks} 
-                        setTasks={setTasks}/>
+                        setTasks={setTasks}
+                        userId={userId}
+                        filterTasks = {filterTasks}
+                        />
             })}
             {/*CAN BE ITS OWN COMPONENT */}
             <div className='todo-items-info'>

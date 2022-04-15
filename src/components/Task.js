@@ -4,7 +4,7 @@ import Check from '../images/icon-check.svg';
 import db from '../utils/firebase';
 
 
-function Task({task, tasks, setTasks}) {
+function Task({task, tasks, setTasks, userId, filterTasks}) {
 
     const [mutableTAsk, setMutableTask] = useState(task);
 
@@ -20,8 +20,21 @@ function Task({task, tasks, setTasks}) {
         // setTasks(updatedTasks);
         // USe setDoc for firebase
 
-        const docRef = doc(db, "tasks", task.id);
-        const payload = {text: task.text, status: !task.status, id: task.id};
+        // const docRef = doc(db, "users", `${userId}`);
+        // const payload = {text: task.text, status: !task.status, id: task.id};
+        // setDoc(docRef, payload);
+        const docRef = doc(db, "users", userId);
+        let arrayRef = filterTasks;
+        const index = arrayRef.indexOf(task);
+        if(arrayRef[index].status === true) {
+            arrayRef[index].status = false;
+        } else {
+            arrayRef[index].status = true;
+        }
+
+        const payload = {
+            status: arrayRef
+        }
         setDoc(docRef, payload);
     } 
     

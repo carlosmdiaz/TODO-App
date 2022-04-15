@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import  { addDoc, collection } from 'firebase/firestore';
+import  { addDoc, collection, setDoc, doc } from 'firebase/firestore';
 import db from '../utils/firebase';
 
-function TaskInput({tasks, setTasks}) {
+function TaskInput({tasks, setTasks, userId, setUser, filterTasks, setFilterTasks}) {
 
   const createId = (array) => {
     const ids = array.map((item) => item.id);
@@ -33,13 +33,26 @@ function TaskInput({tasks, setTasks}) {
       // setTasks([newTask, ...tasks])
       // // Reset Input
       // setInput('');
-      const collectionRef = collection(db, "tasks");
-      const payload = {
+      // const collectionRef = collection(db, "users");
+      // const payload = {
+      //   text: input.trim(),
+      //   status: false
+      // }
+      // await addDoc(collectionRef, payload);
+      // setInput('');
+      const docRef = doc(db, "users", `${userId}`);
+      console.log(userId);
+      const newTask = {
         text: input.trim(),
-        status: false
+        status: false,
+      };
+      let tasksRef = filterTasks;
+      tasksRef.push(newTask);
+      const payload = {
+        tasks: tasksRef
       }
-      await addDoc(collectionRef, payload);
-      setInput('');
+      setDoc(docRef, payload);
+      setInput("");
     }
   }
   return ( 
