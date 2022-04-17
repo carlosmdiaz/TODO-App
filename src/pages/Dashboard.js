@@ -50,8 +50,9 @@ useEffect(() => {
       console.log("Please sign in!!");
     }
   })
-
+  // snapshot.data().tasks.map((task, id) => ({...task, id: id}))
   const unsub = onSnapshot(doc(db, "users", `${user}`), (snapshot) => {
+    console.log(snapshot.data())
     let todos = snapshot.data().tasks.map((task, id) => ({...task, id: id}));
     const handleFilter = () => {
       if (filterStatus === "active") {
@@ -65,7 +66,7 @@ useEffect(() => {
     handleFilter(todos);
   });
   return unsub;
-}, [user, tasks,filterTasks]);
+}, [user, tasks,filterStatus]);
 
   return (
     <div className='Dashboard'>
